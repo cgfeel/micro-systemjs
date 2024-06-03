@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用 SystemJS 机制加载应用前先获取依赖</title>
+</head>
+<body>
+    主应用 - 基座 - 用来加载子应用的
+    <div id="root"></div>
+    <script type="systemjs-importmap">
+        {
+            "imports": {
+                "react": "https://cdn.bootcdn.net/ajax/libs/react/18.2.0/umd/react.development.js",
+                "react-dom": "https://cdn.bootcdn.net/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"
+            }
+        }
+    </script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/systemjs/6.10.1/system.min.js"></script>
+    <script>
+        System.import("./index.js");
+    </script>
+</body>
+</html>

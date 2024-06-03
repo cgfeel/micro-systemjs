@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>复现 SystemJS 机制</title>
+</head>
+<body>
+    主应用 - 基座 - 用来加载子应用的
+    <div id="root"></div>
+    <script>
+        // 直接加载子应用：导入打包后的包进行加载，采用 systemjs 规范
+
+        // 复现 systemjs
+        // 先看打包后的结果 index.js: System.register(依赖列表, 回调函数)
+        //  - 回调函数返回一个数组，数据包含 setters 数组类型，会将加载的结果通过数组下标的函数，分别赋予给 webpack
+        //  - 还有一个 execute 函数；用于导入依赖完成后执行依赖所在的变量
+
+        // 模块规范，用来加载 system 模块
+        class SystemJS {
+            // 注册记录
+            lastRegister = []
+
+            // 映射表
+            newMapURL = {}
+
+            // 获取 window 新增对象
+            set = new Set()
+
+            // 加载的资源这里称作 id，原则上可以是一个第三方 cdn 的 URL
+            import(id) {
+                return Promise.resolve(this._processScripts()).then(sources => {
+                    // 1) 去当前路径查找对应的资源: index.js
+                    const lastIndex = location.href.lastIndexOf("/");
+                    const baseUrl = location.href.slice(0, lastIndex);
+
+                    if (id.startsWith("./")) {
+                        return `${baseUrl}/${id.slice(2)}`;
+                    }
+                }).then(
+                    // 2) 加载指定 id 的脚本是一个微任务
+                    id => this._load(id)
+                ).then(([deps, declare]) => {
+                    // 3) 拿到注册对象后接受 2 个参数
+                    //  - 第一个参数是 webpack 动态导出用到的方法，必填
+                    //  - 第二个参数是传递的上下文，可选
+                    // 返回带有两个属性的对象：
+                    //  - setters: 挂载依赖模块的方法数据
+                    //  - execute: 挂载完成最后回调的执行方法
+                    const { setters, execute } = declare(() => {});
+                    
+                    this._getLastGlobalProperty();
+                    return Promise.all(deps.map((dep, i) => {
+                        return this._load(dep).then(() => {
+                            const property = this._getLastGlobalProperty(true);
+                            setters[i](property);
+                        });
+                    })).then(() => {
+                        // 4) 执行方法并清空全局新增对象记录，以便下次使用
+                        this.set.clear();
+                        execute();
+                    });
+                });
+            }
+            // 将回调的结果保存起来
+            register(deps, declare) {
+                // 本地脚本加载后是个微任务，会先同步执行 register，之后在微任务中响应 load
+                this.lastRegister = [deps, declare];
+            }
+            // 给 widnow 做一个快照，保存先后状态提取加载的模块
+            _getLastGlobalProperty(filter) {
+                for (const i in window) {
+                    if (filter && this.set.has(i)) continue;
+                    this.set.add(i);
+
+                    if (filter) return window[i];
+                }
+            }
+            // 加载资源
+            _load(id) {
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement("script");
+                    script.src = this.newMapURL[id] || id;
+                    script.async = true;
+
+                    document.head.appendChild(script);
+                    script.addEventListener("load", () => {
+                        // 在 load 响应中取出注册的对象，在微任务中返回回去，并清空注册以便后续执行
+                        const register = this.lastRegister;
+                        this.lastRegister = [];
+
+                        resolve(register);
+                    })
+                });
+            }
+            // 获取所有的 script 并筛选出 systemjs-importmap
+            _processScripts() {
+                Array.from(document.querySelectorAll("script")).forEach(script => {
+                    if (script.type === "systemjs-importmap") {
+                        const { imports } = JSON.parse(script.innerHTML);
+                        Object.entries(imports).forEach(([key, value]) => (this.newMapURL[key] = value));
+                    }
+                });
+            }
+        }
+
+        const System = new SystemJS;
+    </script>
+    <!-- 引入的资源必须是 umd，其他格式没办法解析，比如 esMoudle 在这里没办法 import -->
+    <script type="systemjs-importmap">
+        {
+            "imports": {
+                "react": "https://cdn.bootcdn.net/ajax/libs/react/18.2.0/umd/react.development.js",
+                "react-dom": "https://cdn.bootcdn.net/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"
+            }
+        }
+    </script>
+    <script>
+        // 例如上 System.import 应该返回一个 promise，便于加载后立即执行回调
+        System.import("./index.js").then(() => {
+            console.log('模块加载完毕');
+        });
+
+        // 本质就是先加载依赖列表，再去加载逻辑
+        // （内部通过 script 加载资源，给 window 拍照保存先后状态）
+        // JSONP
+    </script>
+</body>
+</html>
