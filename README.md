@@ -8,8 +8,6 @@
 
 ### `SystemJS` 使用和复现
 
-目录：`./systemjs` [[查看](https://github.com/cgfeel/micro-systemjs)]
-
 运行环境：`Webpack` + `React` + `Typescript` (不重要，换成 `Vue` 也是一样的)
 
 **`Webpack` 打包总结：** [[查看配置](https://github.com/cgfeel/micro-systemjs/blob/main/webpack.config.js)]
