@@ -16,7 +16,7 @@
 - `externals: ["react", "react-dom"]`，分离依赖的框架
 - `libraryTarget: "system"` 最终编译为 `index.js` 放置在 `dist`
 
-**`index.js` 概览：** [[查看](https://github.com/cgfeel/micro-systemjs/blob/main/dist/index.js)]
+**`index.js` 编译后的文件概览：** [[查看](https://github.com/cgfeel/micro-systemjs/blob/main/dist/index.js)]
 
 - 由 `System.register` 完成注册，接受 2 个参数，第一个是依赖，这里是 `["react","react-dom"]`
 - 第二个是加载回调函数，有 2 个参数 [[见文件注释](https://github.com/cgfeel/micro-systemjs/blob/main/dist/index.html)]，返回一个对象，包含：
