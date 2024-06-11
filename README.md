@@ -4,9 +4,9 @@
 
 ---
 
-## 示例
+## `SystemJS` 使用和复现
 
-### `SystemJS` 使用和复现
+### 1. 前期准备：打个包
 
 运行环境：`Webpack` + `Typescript` + `React` (不重要，换成 `Vue` 也是一样的)
 
@@ -23,11 +23,11 @@
   - `setters`：记录加载模块的数组对象，顺序和加载依赖数组一致
   - `execute`：全部加载完毕后执行方法进行渲染
 
-**手写两个 html 了解 `systemjs`：**
+### 2. 手写两个 html 了解 `systemjs`：
 
 运行方式：直接点击 html 在浏览器中查看演示，不需要启动服务
 
-1. 通过 `systemjs` 加载应用和对应的逻辑，完成渲染
+#### 2.1. 通过 `systemjs` 加载应用和对应的逻辑，完成渲染
 
 文件：`./systemjs/dist/systemjs.html` [[查看](https://github.com/cgfeel/micro-systemjs/blob/main/dist/systemjs.html)]
 
@@ -37,7 +37,7 @@
 - `SystemJS` 源码包 `system.min.js`
 - `System.import("./index.js")` 导入打包后的文件
 
-2.  复现 `systemjs`
+#### 2.2. 复现 `systemjs`
 
 文件：`./systemjs/dist/index.html` [[查看](https://github.com/cgfeel/micro-systemjs/blob/main/dist/index.html)]
 
