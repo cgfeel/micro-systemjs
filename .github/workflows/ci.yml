@@ -33,9 +33,9 @@ jobs:
 
       # 2. 安装pnpm（Ubuntu默认无pnpm，需手动安装）
       - name: Install pnpm
-        run: |
-          corepack enable # 启用corepack（Node.js 16+内置，管理pnpm/yarn）
-          corepack prepare pnpm@latest --activate # 安装最新版pnpm（可指定版本如pnpm@9.x）
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
 
       # 3. 设置Node.js环境（匹配项目Node版本，优先LTS）
       - name: Set up Node.js
