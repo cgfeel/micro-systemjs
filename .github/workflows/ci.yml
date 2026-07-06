@@ -18,44 +18,51 @@ jobs:
   validate-and-build:
     runs-on: ubuntu-latest
     steps:
-      # 1. 检出代码（必须带fetch-depth: 0，否则pnpm workspace可能识别异常）
-      - name: Checkout code
+      - name: Checkout parent repo
         uses: actions/checkout@v4
         with:
+          repository: cgfeel/zf-micro-app
+          path: zf-micro-app
+          token: ${{ secrets.GH_PACKAGES_TOKEN }}
+
+      - name: Checkout systemjs (PR code into workspace)
+        uses: actions/checkout@v4
+        with:
+          path: zf-micro-app/apps/systemjs
           fetch-depth: 0
+          ref: ${{ github.sha }}
 
       # 2. 安装pnpm（Ubuntu默认无pnpm，需手动安装）
       - name: Install pnpm
         run: |
           corepack enable # 启用corepack（Node.js 16+内置，管理pnpm/yarn）
-          corepack prepare pnpm@10.25.0 --activate # 安装最新版pnpm（可指定版本如pnpm@9.x）
+          corepack prepare pnpm@latest --activate # 安装最新版pnpm（可指定版本如pnpm@9.x）
 
       # 3. 设置Node.js环境（匹配项目Node版本，优先LTS）
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20.x
+          node-version: 22.x
           cache: "pnpm" # 关键：改为pnpm缓存（替代原npm）
-          cache-dependency-path: "pnpm-lock.yaml" # 指定pnpm锁文件路径
+          cache-dependency-path: zf-micro-app/pnpm-lock.yaml # 指定pnpm锁文件路径
 
       # 4. 安装monorepo所有依赖（pnpm ci替代npm ci，更适配monorepo）
       - name: Install dependencies
+        working-directory: zf-micro-app
         run: |
-          pnpm install --frozen-lockfile # 严格按pnpm-lock.yaml安装，禁用版本更新
+          pnpm install --frozen-lockfile --prefer-offline # 严格按pnpm-lock.yaml安装，禁用版本更新
           pnpm list # 可选：打印依赖列表，方便调试
 
       # 5. 执行构建（构建指定子包，或所有子包）
       - name: Build project
-        # 方式1：构建指定子包（推荐，避免构建无关包）
-        # run: pnpm --filter @event-chat/core build
-        # 方式2：构建所有子包（根package.json配置"build": "pnpm -r build"）
-        run: pnpm run build
+        working-directory: zf-micro-app
+        run: pnpm --filter systemjs build
 
       # 6. 上传Storybook静态文件为Pages工件
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: "dist"
+          path: "zf-micro-app/apps/systemjs/dist"
 
       # 7. 部署到GitHub Pages（官方套件，无需额外指定目录）
       - id: deploy
