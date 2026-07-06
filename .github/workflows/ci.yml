@@ -36,7 +36,7 @@ jobs:
         with:
           node-version: 22.x
           cache: "pnpm" # 关键：改为pnpm缓存（替代原npm）
-          cache-dependency-path: "**/pnpm-lock.yaml" # 指定pnpm锁文件路径
+          cache-dependency-path: "pnpm-lock.yaml" # 指定pnpm锁文件路径
 
       # 4. 安装monorepo所有依赖（pnpm ci替代npm ci，更适配monorepo）
       - name: Install dependencies
