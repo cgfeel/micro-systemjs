@@ -24,19 +24,19 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 2. 设置Node.js环境（匹配项目Node版本，优先LTS）
+      # 2. 安装pnpm（Ubuntu默认无pnpm，需手动安装）
+      - name: Install pnpm
+        run: |
+          corepack enable # 启用corepack（Node.js 16+内置，管理pnpm/yarn）
+          corepack prepare pnpm@latest --activate # 安装最新版pnpm（可指定版本如pnpm@9.x）
+
+      # 3. 设置Node.js环境（匹配项目Node版本，优先LTS）
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22.x
           cache: "pnpm" # 关键：改为pnpm缓存（替代原npm）
           cache-dependency-path: "**/pnpm-lock.yaml" # 指定pnpm锁文件路径
-
-      # 3. 安装pnpm（Ubuntu默认无pnpm，需手动安装）
-      - name: Install pnpm
-        run: |
-          corepack enable # 启用corepack（Node.js 16+内置，管理pnpm/yarn）
-          corepack prepare pnpm@latest --activate # 安装最新版pnpm（可指定版本如pnpm@9.x）
 
       # 4. 安装monorepo所有依赖（pnpm ci替代npm ci，更适配monorepo）
       - name: Install dependencies
