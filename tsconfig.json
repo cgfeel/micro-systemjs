@@ -1,12 +1,13 @@
 {
     "compilerOptions": {
         "outDir": "./dist/",
+        // "ignoreDeprecations": "6.0",
         "noImplicitAny": true,
         "module": "ES6",
-        "target": "ES5",
+        "target": "es2016",
         "jsx": "react-jsx",
         "allowJs": true,
-        "moduleResolution": "Node",
+        "moduleResolution": "bundler",
         "esModuleInterop": true
     }
 }
