@@ -59,10 +59,19 @@ jobs:
 
       # 6. 上传Storybook静态文件为Pages工件
       - name: Upload Pages artifact
+        if: github.event_name == 'push'
         uses: actions/upload-pages-artifact@v3
         with:
           path: "zf-micro-app/apps/systemjs/dist"
 
+  deploy:
+    if: github.event_name == 'push'
+    needs: validate-and-build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    steps:
       # 7. 部署到GitHub Pages（官方套件，无需额外指定目录）
       - id: deploy
         name: Deploy to GitHub Pages
