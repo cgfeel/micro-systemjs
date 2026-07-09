@@ -1,5 +1,7 @@
+const { loader } = require("@event-chat/micro-dev-config/helpers");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
+
 
 module.exports = env => {
     return {
@@ -39,7 +41,9 @@ module.exports = env => {
                 // 3.5 对于 ts 先用 ts-load 转换之后再交给 babel
                 {
                     test: /\.tsx?$/,
-                    use: "ts-loader",
+                    use: {
+                        loader: loader("ts-loader")
+                    },
                     exclude: /node_modules/
                 }
             ]
