@@ -2,7 +2,6 @@ const { loader } = require("@event-chat/micro-dev-config/helpers");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
-
 module.exports = env => {
     return {
         // 1.为了更好的看到打包后的代码，统一设置 mode 为开发模式
