@@ -1,5 +1,4 @@
-const { loader } = require("@event-chat/micro-dev-config/helpers");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { HtmlWebpackPlugin, loader } = require("@event-chat/micro-dev-config/helpers");
 const path = require("path");
 
 module.exports = env => {
