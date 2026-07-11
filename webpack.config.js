@@ -104,11 +104,12 @@ module.exports = env => [
         ...baseConfig,
         entry: "./src/facade.ts",
         output: {
-            filename: 'custom-system.js',
-            library: {
-                type: 'window',
-                name: 'System'
-            }
+            filename: 'custom-system.js'
+            // facade 中通过 Reflect 设置对象不可重写，避免冲突
+            // library: {
+            //     type: 'window',
+            //     name: 'System'
+            // }
         }
     },
     // ======== 构建 A：业务代码 → dist/index.js ========
