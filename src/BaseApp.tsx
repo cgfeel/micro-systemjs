@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom/client'
 
 const App: FC = () => (
   <div>
-    主应用 - 基座 - 用来加载子应用的 [<a>SystemJS</a>] [<a>CustomSystemJS</a>]
+    主应用 - 基座 - 用来加载子应用的 [<a href="./">SystemJS</a>] [
+    <a href="./custom.html">CustomSystemJS</a>]
   </div>
 )
 
