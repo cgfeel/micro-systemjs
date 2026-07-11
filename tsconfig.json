@@ -1,12 +1,10 @@
 {
-    "compilerOptions": {
-        "outDir": "./dist/",
-        "noImplicitAny": true,
-        "module": "ES6",
-        "target": "es2016",
-        "jsx": "react-jsx",
-        "allowJs": true,
-        "moduleResolution": "bundler",
-        "esModuleInterop": true
-    }
+  "extends": "@event-chat/micro-dev-config/tsconfig",
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "rootDir": "src",
+    "jsx": "react-jsx",
+    "allowJs": true
+  },
+  "include": ["src/**/*.ts"]
 }
