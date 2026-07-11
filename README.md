@@ -11,7 +11,7 @@
 - 编译子应用 `/src/index.tsx`
 - 编译基座，分 2 个入口 `/src/BaseApp.tsx` 和 `/src/loader.ts`
 
-其中 `loader` 需要分别为 `systemjs` 和复现的 `custom-system` 分别编译：
+其中 `loader` 需要为 `systemjs` 和复现的 `custom-system` 分别编译：
 
 - 通过 `APP_NAME` 做区分，`system-custom` 为手动复现最终编译产物为 `custom.html`
 - 否则按照默认编译为 `index.html`
