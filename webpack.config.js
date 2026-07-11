@@ -79,6 +79,7 @@ const buildLoader = (APP_NAME, BASE_URL = '/') => ({
         new HtmlWebpackPlugin({
             chunks: APP_NAME === 'system-custom' ? ['base', 'custom-build'] : ['base', 'build'],
             filename: APP_NAME === 'system-custom' ? 'custom.html' : 'index.html',
+            title: APP_NAME === 'system-custom' ? 'SystemJS - 基座页面' : '复现 SystemJS - 基座页面',
             template: "./public/index.html",
             templateParameters: { BASE_URL }
         })
