@@ -49,7 +49,7 @@ const reactSystemConfig = {
 
 const buildLoader = (APP_NAME, BASE_URL = '/') => ({
     ...baseConfig,
-    name: 'loader',
+    name: `loader:${APP_NAME}`,
     entry: APP_NAME === 'system-custom' ? {
         base: './src/BaseApp.tsx',
         'custom-build': './src/loader.ts'
