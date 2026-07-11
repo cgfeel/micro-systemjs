@@ -2,6 +2,21 @@
 
 一个 `SystemJS` 原理演示，完整内容查看微前端主仓库：https://github.com/cgfeel/zf-micro-app
 
+## 更新
+
+`webpack` 分段打包代替手写模板文件，见 `webpack.config.js`
+
+- 编译 `systemjs` 需要在运行时加载的包：`react`、`react-dom`
+- 复现 `systemjs` 为 `/src/SystemJS.ts`，并通过 `/src/facade.ts` 作为入口挂载到 `window`
+- 编译子应用 `/src/index.tsx`
+- 编译基座，分 2 个入口 `/src/BaseApp.tsx` 和 `/src/loader.ts`
+
+其中 `loader` 需要分别为 `systemjs` 和复现的 `custom-system` 分别编译：
+
+- 通过 `APP_NAME` 做区分，`system-custom` 为手动复现最终编译产物为 `custom.html`
+- 否则按照默认编译为 `index.html`
+- 在 `/src/loader.ts` 中通过 `process.env.APP_NAME` 分别加载不同的包
+
 ---
 
 ## `SystemJS` 使用和复现
