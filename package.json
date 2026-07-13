@@ -20,7 +20,7 @@
     "@babel/preset-env": "^7.24.6",
     "@babel/preset-react": "^7.24.6",
     "@babel/runtime": "^7.24.6",
-    "@event-chat/micro-dev-config": "^0.0.16",
+    "@event-chat/micro-dev-config": "^0.0.21",
     "@types/node": "^16.18.126",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",

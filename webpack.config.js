@@ -1,4 +1,5 @@
-const { HtmlWebpackPlugin, copyPlugin, defineEnvPlugin, loader } = require("@event-chat/micro-dev-config/helpers");
+const { loader } = require("@event-chat/micro-dev-config/helpers");
+const { HtmlWebpackPlugin, copyPlugin, defineEnvPlugin } = require("@event-chat/micro-dev-config/plugins")
 const path = require('path')
 
 const distPath = path.resolve(__dirname, 'dist')
