@@ -38,6 +38,7 @@ class SystemJS {
     // 本地脚本加载后是个微任务，会先同步执行 register，之后在微任务中响应 load
     this.lastRegister = [deps, declare]
   }
+
   // 解析 SystemJS 模块：加载脚本 → 执行工厂 → 递归解析依赖 → execute → 返回导出
   _resolveModule(id: string): Promise<unknown> {
     const url = this.newMapURL[id] || id
@@ -53,7 +54,7 @@ class SystemJS {
       let moduleExports: unknown = undefined
 
       // 传入真实的导出捕获函数，替代之前的 () => {}
-      const { setters, execute } = declare((exports: unknown) => {
+      const { setters, execute } = declare((exports) => {
         moduleExports = exports
       })
 
@@ -138,5 +139,6 @@ type DeclareFnType = (
   exportFn?: WEBPACK_DYNAMIC_EXPORT,
   context?: SystemModuleContext
 ) => SystemRegisterModuleDef
+
 type ImportMapType = { imports: Record<string, string> }
 type WEBPACK_DYNAMIC_EXPORT = (value: unknown) => void
